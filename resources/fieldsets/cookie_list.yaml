@@ -1,0 +1,27 @@
+title: 'Liste des cookies'
+fields:
+  -
+    handle: cookie_list_info
+    field:
+      type: section
+      display: 'Liste des cookies'
+      instructions: 'Générée à partir du global « Cookies » (services et catégories) : elle suit chaque service ajouté ou retiré, rien à saisir ici.'
+  -
+    handle: cookie_list_heading_level
+    field:
+      type: button_group
+      display: 'Niveau des titres de catégorie'
+      instructions: 'Un cran sous le titre qui précède la liste : sous un titre H2, choisir H3.'
+      options:
+        '2': H2
+        '3': H3
+        '4': H4
+      default: '3'
+      width: 50
+  -
+    handle: cookie_list_open_button
+    field:
+      type: toggle
+      display: 'Bouton « Gérer les cookies » sous la liste'
+      default: true
+      width: 50

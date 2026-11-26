@@ -1,0 +1,43 @@
+{
+    "name": "foorintodev/statamic-cookie-consent",
+    "description": "Bandeau de consentement aux cookies pour Statamic : catégories, services intégrés (Meta Pixel, Google Analytics), textes gérés dans le CP, liste des cookies à jour, détection des cookies non déclarés, compatible avec le cache statique complet. Gratuit.",
+    "type": "statamic-addon",
+    "version": "1.0.0",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Foorintodev\\CookieConsent\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Foorintodev\\CookieConsent\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "statamic": {
+            "name": "Foorintodev Cookie Consent",
+            "description": "Bandeau cookies par catégories : aucun script tiers avant l'accord, textes et services gérés dans le CP, liste des cookies générée."
+        },
+        "laravel": {
+            "providers": [
+                "Foorintodev\\CookieConsent\\ServiceProvider"
+            ]
+        }
+    },
+    "require": {
+        "php": "^8.2",
+        "statamic/cms": "^6.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^10.8 || ^11.0"
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "config": {
+        "allow-plugins": {
+            "pixelfear/composer-dist-plugin": true
+        }
+    }
+}

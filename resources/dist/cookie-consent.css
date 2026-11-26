@@ -1,0 +1,163 @@
+/* ==========================================================================
+   Foorintodev Cookie Consent — habillage par défaut du bandeau et de la liste
+   --------------------------------------------------------------------------
+   Tout se règle depuis la CSS du site avec les variables ci-dessous, posées sur
+   .cc (ou :root). Exemple : .cc { --cc-accent: #1E22AA; --cc-bg: #F2ECE3; }
+   Pour un habillage entièrement maison : {{ cookie_consent styles="false" }}.
+   Les boutons peuvent prendre les classes du site : button_class="…".
+   ========================================================================== */
+.cc {
+  --cc-bg: #ffffff;
+  --cc-text: #1f2328;
+  --cc-muted: color-mix(in srgb, var(--cc-text) 72%, var(--cc-bg));
+  --cc-border: color-mix(in srgb, var(--cc-text) 18%, var(--cc-bg));
+  --cc-control: color-mix(in srgb, var(--cc-text) 52%, var(--cc-bg)); /* interrupteur éteint : contraste ≥ 3:1 */
+  --cc-accent: #1f2328;
+  --cc-accent-text: #ffffff;
+  --cc-font: inherit;
+  --cc-font-size: 0.95rem;
+  --cc-radius: 1rem;
+  --cc-btn-radius: 999px;
+  --cc-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+  --cc-width: 28rem;
+  --cc-gap: 1.25rem;
+  --cc-bottom: var(--cc-gap);
+  --cc-side: var(--cc-gap);
+  --cc-z: 1000;
+
+  position: fixed;
+  z-index: var(--cc-z);
+  right: var(--cc-side);
+  bottom: var(--cc-bottom);
+  width: min(var(--cc-width), calc(100vw - 2 * var(--cc-side)));
+  max-height: calc(100vh - var(--cc-bottom) - var(--cc-gap));
+  max-height: calc(100dvh - var(--cc-bottom) - var(--cc-gap));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  box-sizing: border-box;
+  padding: 1.5rem;
+  background: var(--cc-bg);
+  color: var(--cc-text);
+  font-family: var(--cc-font);
+  font-size: var(--cc-font-size);
+  line-height: 1.5;
+  text-align: left;
+  border: 1px solid var(--cc-border);
+  border-radius: var(--cc-radius);
+  box-shadow: var(--cc-shadow);
+}
+.cc[hidden], .cc [hidden] { display: none !important; }
+.cc *, .cc *::before, .cc *::after { box-sizing: border-box; }
+.cc:focus { outline: none; }
+.cc:focus-visible { outline: 2px solid var(--cc-accent); outline-offset: 3px; }
+
+.cc-title { margin: 0; font-size: 1.15em; font-weight: 600; line-height: 1.25; }
+.cc-text { margin: 0.6rem 0 0; }
+.cc-link { color: inherit; text-decoration: underline; text-underline-offset: 0.2em; }
+
+/* -------------------------------------------------------------- boutons */
+.cc-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.15rem; }
+.cc-btn--choice { flex: 1 1 8rem; justify-content: center; }
+.cc-btn--customize { flex: 1 1 100%; justify-content: center; }
+.cc-btn { cursor: pointer; }
+.cc-btn--default {
+  display: inline-flex; align-items: center; justify-content: center;
+  margin: 0;
+  padding: 0.7rem 1.1rem;
+  font: inherit; font-weight: 600; line-height: 1.2;
+  color: var(--cc-accent-text);
+  background: var(--cc-accent);
+  border: 1px solid var(--cc-accent);
+  border-radius: var(--cc-btn-radius);
+}
+.cc-btn--default:hover { background: color-mix(in srgb, var(--cc-accent) 85%, var(--cc-text)); }
+.cc-btn--secondary { color: var(--cc-text); background: transparent; border-color: var(--cc-control); }
+.cc-btn--secondary:hover { background: color-mix(in srgb, var(--cc-text) 6%, transparent); }
+.cc-btn--default:focus-visible { outline: 2px solid var(--cc-accent); outline-offset: 2px; }
+
+/* -------------------------------------------------------------- panneau */
+.cc-prefs { margin-top: 1.25rem; padding-top: 1.1rem; border-top: 1px solid var(--cc-border); }
+.cc-cat + .cc-cat { margin-top: 1.1rem; }
+.cc-cat-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.cc-cat-name { font-weight: 600; cursor: default; }
+label.cc-cat-name { cursor: pointer; }
+.cc-always { font-size: 0.85em; font-weight: 600; color: var(--cc-muted); white-space: nowrap; }
+.cc-cat-desc { margin: 0.25rem 0 0; font-size: 0.9em; color: var(--cc-muted); }
+
+.cc-switch {
+  -webkit-appearance: none; appearance: none;
+  position: relative; flex: none;
+  width: 2.75rem; height: 1.5rem; margin: 0;
+  background: var(--cc-control);
+  border: 0; border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.cc-switch::before {
+  content: '';
+  position: absolute; top: 0.1875rem; left: 0.1875rem;
+  width: 1.125rem; height: 1.125rem;
+  background: #ffffff; border-radius: 50%;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease;
+}
+.cc-switch:checked { background: var(--cc-accent); }
+.cc-switch:checked::before { transform: translateX(1.25rem); }
+.cc-switch:focus-visible { outline: 2px solid var(--cc-accent); outline-offset: 2px; }
+
+.cc-details { margin-top: 0.4rem; font-size: 0.88em; }
+.cc-details summary { cursor: pointer; text-decoration: underline; text-underline-offset: 0.2em; width: max-content; max-width: 100%; }
+.cc-details summary:focus-visible { outline: 2px solid var(--cc-accent); outline-offset: 2px; }
+.cc-service { margin-top: 0.6rem; }
+.cc-service-name { margin: 0; font-weight: 600; }
+.cc-provider { font-weight: 400; color: var(--cc-muted); }
+.cc-cookies { margin: 0.25rem 0 0; padding: 0; list-style: none; }
+.cc-cookies li { padding: 0.3rem 0; border-top: 1px solid var(--cc-border); }
+.cc-cookies code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.95em; word-break: break-all; }
+.cc-meta { color: var(--cc-muted); }
+.cc-purpose { display: block; color: var(--cc-muted); }
+
+.cc-save { width: 100%; margin-top: 1.25rem; }
+
+/* ------------------------------------------- liste des cookies {{ cookie_consent:table }}
+   Dans le contenu de la page : elle garde la police et les couleurs du site
+   (bordures en currentColor). Variables à poser sur .cc-list. */
+.cc-list {
+  --cc-list-border: color-mix(in srgb, currentColor 22%, transparent);
+  --cc-list-muted: color-mix(in srgb, currentColor 72%, transparent);
+  --cc-list-head: color-mix(in srgb, currentColor 6%, transparent);
+  --cc-list-focus: currentColor;
+}
+.cc-list-desc { margin: 0.25em 0 1em; }
+.cc-table-wrap { overflow-x: auto; margin: 0 0 1em; }
+.cc-table-wrap:focus-visible { outline: 2px solid var(--cc-list-focus); outline-offset: 2px; }
+.cc-table { width: 100%; min-width: 36rem; border-collapse: collapse; font-size: 0.95em; }
+.cc-table th, .cc-table td { padding: 0.6em 0.75em; border-bottom: 1px solid var(--cc-list-border); text-align: left; vertical-align: top; }
+.cc-table thead th { background: var(--cc-list-head); font-weight: 600; white-space: nowrap; }
+.cc-table tbody th { font-weight: 400; }
+/* Noms jamais coupés : sur un écran étroit, c'est le tableau qui défile dans son cadre. */
+.cc-table code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.95em; white-space: nowrap; }
+.cc-table th:nth-child(2), .cc-table td:nth-child(2) { width: 22%; }
+.cc-table th:nth-child(4), .cc-table td:nth-child(4) { width: 14%; }
+.cc-table-note { display: block; color: var(--cc-list-muted); font-size: 0.9em; }
+.cc-list-policies { margin: 0 0 1.5em; padding-left: 1.25em; }
+
+/* -------------------------------------------------------------- petits écrans */
+@media (max-width: 640px) {
+  .cc {
+    --cc-gap: 0.75rem;
+    left: var(--cc-side);
+    width: auto;
+    padding: 1.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cc-switch, .cc-switch::before { transition: none; }
+}
+
+/* Mode contrasté de Windows : interrupteurs natifs, toujours visibles. */
+@media (forced-colors: active) {
+  .cc-switch { -webkit-appearance: auto; appearance: auto; width: auto; height: auto; }
+  .cc-switch::before { display: none; }
+}
