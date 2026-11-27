@@ -84,8 +84,9 @@ class SettingsTest extends TestCase
         $this->assertSame(['necessary', 'marketing'], $this->categoryHandles($settings));
         $this->assertSame('Meta Pixel', $meta->name);
         $this->assertSame('Meta Platforms Ireland Ltd', $meta->provider);
-        $this->assertSame(['_fbp', '_fbc', 'fr'], $this->names($meta->cookies));
-        $this->assertSame('facebook.com', $meta->cookies[2]->host);
+        $this->assertSame(['_fbp', '_fbc', 'lastExternalReferrer', 'lastExternalReferrerTime', 'fr'], $this->names($meta->cookies));
+        $this->assertSame(['cookie', 'cookie', 'local', 'local', 'cookie'], array_map(fn ($c) => $c->storage, $meta->cookies));
+        $this->assertSame('facebook.com', $meta->cookies[4]->host);
         $this->assertSame('3 months', $meta->cookies[0]->duration);
         $this->assertSame(['type' => 'meta_pixel', 'pixelId' => '1858784328492314'], $meta->loader);
     }

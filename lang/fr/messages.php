@@ -70,6 +70,8 @@ return [
             'name' => 'Pixel Meta',
             '_fbp' => 'Identifie votre navigateur pour que Meta puisse mesurer et diffuser nos publicités.',
             '_fbc' => 'Mémorise la publicité Facebook ou Instagram sur laquelle vous avez cliqué pour venir sur ce site.',
+            'lastExternalReferrer' => 'Mémorise votre provenance (Facebook, Instagram, un autre site ou un accès direct) ; Meta l\'ajoute à la mesure de nos publicités.',
+            'lastExternalReferrerTime' => 'Mémorise le moment où cette provenance a été notée.',
             'fr' => 'Utilisé par Meta pour diffuser et mesurer les publicités, et améliorer leur pertinence.',
         ],
         'google_analytics' => [

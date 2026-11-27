@@ -28,10 +28,17 @@ return [
     'detection' => (bool) env('COOKIE_CONSENT_DETECTION', true),
 
     // Noms jamais signalés (* = n'importe quelle suite de caractères), en plus de ceux saisis
-    // dans le CP. Par défaut : ce que le CP de Statamic laisse chez les rédacteurs.
+    // dans le CP. Par défaut : ce que le CP de Statamic laisse chez les rédacteurs, et que
+    // leur navigateur signale ensuite depuis les pages du site (même origine).
     'ignore' => [
         'statamic.*',       // réglages du CP (localStorage)
         'remember_web_*',   // « Se souvenir de moi » à la connexion au CP
+        '*.pagetree',       // arbres de pages ouverts ou repliés (localStorage)
+        'avatar-hue-*',     // couleurs des avatars des utilisateurs (sessionStorage)
+        'avatar-scheme-*',
+        'avatar-position-*',
+        'avatar-saturation-*',
+        'avatar-lightness-*',
     ],
 
 ];

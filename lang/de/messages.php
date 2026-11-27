@@ -70,6 +70,8 @@ return [
             'name' => 'Meta-Pixel',
             '_fbp' => 'Erkennt Ihren Browser wieder, damit Meta unsere Werbung messen und ausspielen kann.',
             '_fbc' => 'Speichert die Facebook- oder Instagram-Anzeige, über die Sie auf diese Website gekommen sind.',
+            'lastExternalReferrer' => 'Speichert, ob Sie über Facebook, Instagram, eine andere Website oder direkt gekommen sind; Meta nutzt dies zur Messung unserer Werbung.',
+            'lastExternalReferrerTime' => 'Speichert, wann diese Herkunft erfasst wurde.',
             'fr' => 'Wird von Meta verwendet, um Anzeigen auszuspielen, zu messen und ihre Relevanz zu verbessern.',
         ],
         'google_analytics' => [

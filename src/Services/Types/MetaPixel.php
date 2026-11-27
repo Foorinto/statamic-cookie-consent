@@ -11,6 +11,12 @@ use Foorintodev\CookieConsent\Support\Lang;
 /**
  * Pixel Meta (Facebook, Instagram). Durées d'après la documentation de Meta :
  * _fbp et _fbc 90 jours sur le site, fr 90 jours sur facebook.com.
+ *
+ * Le script de configuration du pixel (connect.facebook.net/signals/config/<id>) range
+ * aussi dans le stockage local lastExternalReferrer (« fb », « ig », « other » ou
+ * « empty » : d'où vient le visiteur, joint à chaque événement) et
+ * lastExternalReferrerTime (quand), qu'il efface lui-même au bout de 90 jours.
+ * Déclarés ici, ils sont décrits dans la liste et effacés au refus.
  */
 final class MetaPixel implements ServiceType
 {
@@ -32,6 +38,8 @@ final class MetaPixel implements ServiceType
             cookies: [
                 new Cookie('_fbp', $months, Lang::get('services.meta_pixel._fbp', $lang)),
                 new Cookie('_fbc', $months, Lang::get('services.meta_pixel._fbc', $lang)),
+                new Cookie('lastExternalReferrer', $months, Lang::get('services.meta_pixel.lastExternalReferrer', $lang), storage: 'local'),
+                new Cookie('lastExternalReferrerTime', $months, Lang::get('services.meta_pixel.lastExternalReferrerTime', $lang), storage: 'local'),
                 new Cookie('fr', $months, Lang::get('services.meta_pixel.fr', $lang), host: 'facebook.com'),
             ],
             provider: 'Meta Platforms Ireland Ltd',

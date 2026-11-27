@@ -124,7 +124,13 @@ class BannerTest extends TestCase
         $this->assertSame(['type' => 'meta_pixel', 'pixelId' => '1858784328492314'], $services['m1']['loader']);
         $this->assertSame(['type' => 'google_analytics', 'measurementId' => 'G-ABC123'], $services['g1']['loader']);
         // fr est déposé par facebook.com : le navigateur ne peut pas l'effacer, il n'est pas transmis.
-        $this->assertSame(['_fbp', '_fbc'], array_column($services['m1']['cookies'], 'name'));
+        // Avec le stockage : le navigateur efface aussi ce qui est rangé dans localStorage.
+        $this->assertSame([
+            ['name' => '_fbp', 'storage' => 'cookie'],
+            ['name' => '_fbc', 'storage' => 'cookie'],
+            ['name' => 'lastExternalReferrer', 'storage' => 'local'],
+            ['name' => 'lastExternalReferrerTime', 'storage' => 'local'],
+        ], $services['m1']['cookies']);
     }
 
     public function test_le_code_d_un_service_ne_peut_pas_sortir_de_la_config(): void

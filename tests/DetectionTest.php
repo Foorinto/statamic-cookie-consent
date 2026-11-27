@@ -167,7 +167,33 @@ class DetectionTest extends TestCase
         $config = json_decode(Banner::config(Settings::forSite()), true);
 
         $this->assertSame(self::URL, $config['report']);
-        $this->assertSame(['statamic.*', 'remember_web_*', '_test*'], $config['ignore']);
+        $this->assertSame([
+            'statamic.*', 'remember_web_*', '*.pagetree',
+            'avatar-hue-*', 'avatar-scheme-*', 'avatar-position-*', 'avatar-saturation-*', 'avatar-lightness-*',
+            '_test*',
+        ], $config['ignore']);
+    }
+
+    public function test_ce_que_le_cp_et_le_pixel_laissent_n_est_pas_signale(): void
+    {
+        $this->cookieGlobal(['services' => [
+            ['id' => 'm1', 'type' => 'meta_pixel', 'pixel_id' => '1858784328492314'],
+        ]]);
+
+        // Noms relevés sur un vrai site : onglet d'un rédacteur passé par le CP, puis
+        // visiteur qui a accepté le pixel.
+        $this->report([
+            ['name' => 'avatar-hue-d9277e7b-2f29-44dc-bdb2-*', 'storage' => 'session'],
+            ['name' => 'avatar-saturation-d9277e7b-2f29-44dc-bdb2-*-0', 'storage' => 'session'],
+            ['name' => 'avatar-scheme-d9277e7b-2f29-44dc-bdb2-*', 'storage' => 'session'],
+            ['name' => 'collections.pages.default.pagetree', 'storage' => 'local'],
+            ['name' => 'selector-field.entry.default.pagetree', 'storage' => 'local'],
+            ['name' => 'lastExternalReferrer', 'storage' => 'local'],
+            ['name' => 'lastExternalReferrerTime', 'storage' => 'local'],
+            ['name' => 'avatar', 'storage' => 'local'], // pas un nom du CP : signalé
+        ])->assertNoContent();
+
+        $this->assertSame(['local:avatar'], array_keys($this->recorded()));
     }
 
     public function test_le_tableau_du_cp_echappe_ce_qui_vient_des_visiteurs(): void

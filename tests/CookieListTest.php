@@ -137,7 +137,7 @@ class CookieListTest extends TestCase
         $html = $this->render('{{ cookie_consent:categories }}[{{ handle }}{{ services }}/{{ provider }}{{ cookies }} {{ name }}({{ storage_label }}){{ /cookies }}{{ /services }}]{{ /cookie_consent:categories }}');
 
         $this->assertStringContainsString('[analytics/Google Ireland Ltd _ga(Cookie) _ga_ABC123(Cookie)]', $html);
-        $this->assertStringContainsString('[marketing/Meta Platforms Ireland Ltd _fbp(Cookie) _fbc(Cookie) fr(Cookie)]', $html);
+        $this->assertStringContainsString('[marketing/Meta Platforms Ireland Ltd _fbp(Cookie) _fbc(Cookie) lastExternalReferrer(Local storage) lastExternalReferrerTime(Local storage) fr(Cookie)]', $html);
         $this->assertStringContainsString('cookie-consent(Local storage)', $html);
     }
 

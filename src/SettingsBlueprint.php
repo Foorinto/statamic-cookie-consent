@@ -154,7 +154,7 @@ class SettingsBlueprint
                             'field' => [
                                 'type' => 'list',
                                 'display' => 'Noms à ignorer',
-                                'instructions' => 'Un nom par ligne ; * remplace n\'importe quelle suite de caractères (exemple : _hj*). Pour ce qui ne concerne pas les visiteurs (outils des rédacteurs, tests).',
+                                'instructions' => 'Un nom par ligne ; `*` remplace n\'importe quelle suite de caractères (exemple : `_hj*`). Pour ce qui ne concerne pas les visiteurs (outils des rédacteurs, tests).',
                             ],
                         ],
                     ],
@@ -224,7 +224,7 @@ class SettingsBlueprint
                             'mode' => 'stacked',
                             'add_row' => 'Ajouter un cookie',
                             'fields' => [
-                                ['handle' => 'name', 'field' => ['type' => 'text', 'display' => 'Nom', 'instructions' => '* remplace une suite de caractères variable (exemple : _hjSession_*).', 'width' => 50, 'validate' => ['required']]],
+                                ['handle' => 'name', 'field' => ['type' => 'text', 'display' => 'Nom', 'instructions' => '`*` remplace une suite de caractères variable (exemple : `_hjSession_*`).', 'width' => 50, 'validate' => ['required']]],
                                 [
                                     'handle' => 'storage',
                                     'field' => [

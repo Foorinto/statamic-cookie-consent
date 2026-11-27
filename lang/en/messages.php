@@ -73,6 +73,8 @@ return [
             'name' => 'Meta Pixel',
             '_fbp' => 'Identifies your browser so that Meta can measure and deliver our ads.',
             '_fbc' => 'Remembers the Facebook or Instagram ad you clicked to reach this website.',
+            'lastExternalReferrer' => 'Remembers whether you arrived from Facebook, Instagram, another website or directly; Meta adds this to the measurement of our ads.',
+            'lastExternalReferrerTime' => 'Remembers when that arrival was recorded.',
             'fr' => 'Used by Meta to deliver, measure and improve the relevance of ads.',
         ],
         'google_analytics' => [

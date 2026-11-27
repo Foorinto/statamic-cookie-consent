@@ -78,7 +78,8 @@ php artisan vendor:publish --tag=statamic-cookie-consent --force
   lus dans la config de Laravel).
 - **Services** :
   - *Meta Pixel* (identifiant du pixel) → Marketing ; cookies `_fbp`, `_fbc` (3 mois) et `fr`
-    sur facebook.com (3 mois) ;
+    sur facebook.com (3 mois), stockage local `lastExternalReferrer` et
+    `lastExternalReferrerTime` (provenance du visiteur, 3 mois) ;
   - *Google Analytics 4* (ID de mesure `G-…`) → Mesure d'audience ; cookies `_ga` et
     `_ga_<ID sans G->` (2 ans) ;
   - *Service personnalisé* : nom, fournisseur, catégorie, politique du fournisseur, cookies
@@ -186,8 +187,11 @@ fait sans cookie, vers `/!/statamic-cookie-consent/report` (sans session ni jeto
 qu'une fois par semaine. Rangement : `storage/app/statamic-cookie-consent/detections.json`
 (200 noms au plus).
 
-Ignorés d'office (config `ignore`) : `statamic.*` et `remember_web_*`, laissés par le CP
-chez les rédacteurs. Pour couper la détection : `COOKIE_CONSENT_DETECTION=false`.
+Ignorés d'office (config `ignore`) : ce que le CP laisse chez les rédacteurs, et que leur
+navigateur signale ensuite depuis les pages du site (`statamic.*`, `remember_web_*`,
+`*.pagetree`, `avatar-hue-*` et les autres couleurs d'avatar). Un site qui a publié la config
+garde sa propre liste : la compléter après une mise à jour. Pour couper la détection :
+`COOKIE_CONSENT_DETECTION=false`.
 
 ## Cache statique
 
@@ -208,7 +212,7 @@ qu'à la remise en cache suivante). Sur un site qui gère déjà lui-même ce ca
 | `storage_key` | `COOKIE_CONSENT_STORAGE_KEY` | `cookie-consent` | clé du choix dans le `localStorage` du navigateur |
 | `flush_static_cache` | `COOKIE_CONSENT_FLUSH_STATIC_CACHE` | `true` | vide le cache statique quand le global est enregistré |
 | `detection` | `COOKIE_CONSENT_DETECTION` | `true` | signalement des noms non déclarés par les navigateurs |
-| `ignore` | — | `statamic.*`, `remember_web_*` | noms jamais signalés (en plus de ceux du CP) |
+| `ignore` | — | `statamic.*`, `remember_web_*`, `*.pagetree`, `avatar-*-…` | noms jamais signalés (en plus de ceux du CP) |
 
 ## Code
 
