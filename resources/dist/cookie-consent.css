@@ -117,7 +117,7 @@ label.cc-cat-name { cursor: pointer; }
 .cc-meta { color: var(--cc-muted); }
 .cc-purpose { display: block; color: var(--cc-muted); }
 
-.cc-save { width: 100%; margin-top: 1.25rem; }
+.cc-save { width: 100%; margin-top: 1.25rem; justify-content: center; }
 
 /* ------------------------------------------- liste des cookies {{ cookie_consent:table }}
    Dans le contenu de la page : elle garde la police et les couleurs du site

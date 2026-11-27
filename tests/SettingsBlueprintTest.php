@@ -15,6 +15,9 @@ class SettingsBlueprintTest extends TestCase
 
         $this->assertNotNull($blueprint);
 
+        $this->assertSame('toggle', $blueprint->field('banner_enabled')->type());
+        $this->assertTrue($blueprint->field('banner_enabled')->defaultValue());
+
         foreach (['title', 'message', 'policy_link', 'policy_label', 'accept_all_label', 'decline_all_label',
             'customize_label', 'save_label', 'reopen_label', 'services',
             'necessary_name', 'preferences_name', 'analytics_name', 'marketing_description'] as $handle) {

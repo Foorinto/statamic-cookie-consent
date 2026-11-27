@@ -32,6 +32,20 @@ class SettingsBlueprint
                     'display' => 'Bandeau',
                     'sections' => [
                         [
+                            'display' => 'Affichage',
+                            'fields' => [
+                                [
+                                    'handle' => 'banner_enabled',
+                                    'field' => [
+                                        'type' => 'toggle',
+                                        'display' => 'Afficher le bandeau',
+                                        'instructions' => 'Même allumé, le bandeau n\'apparaît que si au moins un service demande l\'accord (catégorie autre que « Nécessaires »). Coupé : ni bandeau ni bouton pour le rouvrir, et aucun service soumis à l\'accord n\'est chargé.',
+                                        'default' => true,
+                                    ],
+                                ],
+                            ],
+                        ],
+                        [
                             'display' => 'Message',
                             'instructions' => 'Champ vide = texte par défaut, dans la langue du site.',
                             'fields' => [

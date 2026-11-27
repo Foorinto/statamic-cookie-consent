@@ -3,6 +3,7 @@
    --------------------------------------------------------------------------
    Sans dépendance ni compilation. Lit la config écrite dans la page par la balise
    {{ cookie_consent }} (#cookie-consent-config) :
+     active        bandeau proposé (false : coupé dans le CP, ou rien à accepter)
      version       empreinte des services : si elle change, l'accord est redemandé
      storageKey    clé du choix dans localStorage (pas un cookie)
      lifetimeDays  durée de validité d'un choix
@@ -32,6 +33,9 @@
   var config;
   try { config = JSON.parse(configEl.textContent); } catch (e) { return; }
 
+  // Bandeau proposé (allumé dans le CP et au moins un service qui demande l'accord) ?
+  // Sinon : pas de bandeau ni de bouton, aucun service soumis à l'accord n'est chargé.
+  var active = config.active !== false;
   var optional = config.categories.filter(function (c) { return c !== 'necessary'; });
   var prefs = root.querySelector('[data-cc-prefs]');
   var customize = root.querySelector('[data-cc-customize]');
@@ -347,11 +351,13 @@
   });
 
   // Boutons « Gérer les cookies » : cachés tant que ce script n'a pas démarré.
-  Array.prototype.forEach.call(document.querySelectorAll('[data-cookie-consent-open]'), function (b) {
-    b.hidden = false;
-  });
+  if (active) {
+    Array.prototype.forEach.call(document.querySelectorAll('[data-cookie-consent-open]'), function (b) {
+      b.hidden = false;
+    });
+  }
   document.addEventListener('click', function (e) {
-    var b = e.target.closest && e.target.closest('[data-cookie-consent-open]');
+    var b = active && e.target.closest && e.target.closest('[data-cookie-consent-open]');
     if (!b) return;
     e.preventDefault();
     opener = b;
@@ -359,14 +365,18 @@
   });
 
   window.CookieConsent = {
-    open: function () { show(true, true); },
+    open: function () { if (active) show(true, true); },
     has: granted,
     onChange: function (fn) { listeners.push(fn); if (current) fn(snapshot()); }
   };
 
   /* ------------------------------------------------------------ démarrage */
   var s = stored();
-  if (valid(s)) {
+  if (!active) {
+    // Bandeau non proposé : le choix gardé n'est pas lu, seuls les services « Nécessaires »
+    // démarrent, les traces des autres sont effacées.
+    apply();
+  } else if (valid(s)) {
     current = s;
     apply();
   } else {

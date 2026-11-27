@@ -45,6 +45,9 @@ class Banner
     public static function config(Settings $settings): string
     {
         return json_encode([
+            // false : le navigateur n'affiche pas le bandeau et ne charge aucun service
+            // soumis à l'accord (la détection et les services « Nécessaires » restent).
+            'active' => $settings->active(),
             'version' => $settings->version(),
             'storageKey' => (string) config('foorintodev-cookie-consent.storage_key'),
             'lifetimeDays' => (int) config('foorintodev-cookie-consent.lifetime_days'),
@@ -72,13 +75,18 @@ class Banner
 
     /**
      * Bouton qui rouvre le bandeau (pied de page, liste des cookies). Caché tant que
-     * cookie-consent.js n'a pas démarré : sans JavaScript, il ne ferait rien.
+     * cookie-consent.js n'a pas démarré : sans JavaScript, il ne ferait rien. Rien du tout
+     * quand le bandeau n'est pas proposé (coupé dans le CP, ou rien à accepter).
      *
      * @param  string|null  $labelHtml  libellé déjà sûr (contenu d'une balise en paire) ;
      *                                  sinon le texte « reopen_label », échappé.
      */
     public static function openButton(Settings $settings, string $class = '', ?string $labelHtml = null): string
     {
+        if (! $settings->active()) {
+            return '';
+        }
+
         $label = $labelHtml ?? e($settings->text('reopen_label'));
         $class = trim($class);
 

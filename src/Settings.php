@@ -66,6 +66,29 @@ class Settings
         return collect(self::TEXTS)->mapWithKeys(fn ($key) => [$key => $this->text($key)])->all();
     }
 
+    /** Interrupteur « Afficher le bandeau » du CP : allumé par défaut, et sans global. */
+    public function enabled(): bool
+    {
+        $value = $this->variables?->values()->get('banner_enabled');
+
+        return $value === null || filter_var($value, FILTER_VALIDATE_BOOLEAN);
+    }
+
+    /** Au moins un service demande l'accord (rattaché à une autre catégorie que « Nécessaires »). */
+    public function needsConsent(): bool
+    {
+        return collect($this->services())->contains(fn (Service $s) => $s->category !== 'necessary');
+    }
+
+    /**
+     * Bandeau proposé aux visiteurs : allumé dans le CP et quelque chose à accepter. Sinon,
+     * ni bandeau ni bouton pour le rouvrir, et aucun service soumis à l'accord n'est chargé.
+     */
+    public function active(): bool
+    {
+        return $this->enabled() && $this->needsConsent();
+    }
+
     public function policyUrl(): ?string
     {
         if (! $this->variables || ! $this->variables->values()->get('policy_link')) {

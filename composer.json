@@ -2,7 +2,7 @@
     "name": "foorintodev/statamic-cookie-consent",
     "description": "Bandeau de consentement aux cookies pour Statamic : catégories, services intégrés (Meta Pixel, Google Analytics), textes gérés dans le CP, liste des cookies à jour, détection des cookies non déclarés, compatible avec le cache statique complet. Gratuit.",
     "type": "statamic-addon",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "license": "MIT",
     "autoload": {
         "psr-4": {

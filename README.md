@@ -5,6 +5,8 @@ Bandeau de consentement aux cookies pour Statamic 6, **gratuit (licence MIT)**.
 - **Bandeau** avec « Tout accepter », « Tout refuser » (même poids visuel) et
   « Personnaliser », qui ouvre un choix par catégorie : Nécessaires (toujours actifs),
   Préférences, Mesure d'audience, Marketing. Une catégorie sans service n'apparaît pas.
+- **Seulement quand il sert** : pas de bandeau tant qu'aucun service ne demande l'accord,
+  et un interrupteur dans le CP pour le couper.
 - **Aucun script tiers avant l'accord** : chaque service est chargé dans le navigateur,
   seulement si sa catégorie est acceptée. Au refus, ses cookies sont effacés.
 - **Compatible avec le cache statique complet** : tout se décide dans le navigateur, la
@@ -48,9 +50,13 @@ L'addon n'est pas sur Packagist : il s'installe avec Composer depuis son dépôt
    {{ cookie_consent }}
    ```
    et dans le pied de page, le bouton qui rouvre le bandeau (caché tant que le JavaScript
-   n'a pas démarré) :
+   n'a pas démarré, absent quand le bandeau n'est pas proposé) :
    ```antlers
    {{ cookie_consent:open class="footer-link" }}
+   ```
+   Dans une liste, pour ne pas laisser d'élément vide :
+   ```antlers
+   {{ if {cookie_consent:active} }}<li>{{ cookie_consent:open }}</li>{{ /if }}
    ```
 5. Dans le CP, remplir le global « Cookies » : lien vers la politique de confidentialité,
    services.
@@ -63,9 +69,10 @@ php artisan vendor:publish --tag=statamic-cookie-consent --force
 
 ## Réglages dans le CP (global « Cookies »)
 
-- **Bandeau** : titre, message, lien et texte du lien vers la politique de confidentialité,
-  libellés des boutons et du bouton qui rouvre le bandeau. Champ vide = texte par défaut
-  dans la langue du site (affiché en exemple dans le champ).
+- **Bandeau** : interrupteur « Afficher le bandeau » (voir plus bas), titre, message, lien
+  et texte du lien vers la politique de confidentialité, libellés des boutons et du bouton
+  qui rouvre le bandeau. Champ vide = texte par défaut dans la langue du site (affiché en
+  exemple dans le champ).
 - **Catégories** : nom et description de chaque catégorie. Nécessaires contient toujours le
   site lui-même (le choix du visiteur, le cookie de session et `XSRF-TOKEN`, noms et durées
   lus dans la config de Laravel).
@@ -86,6 +93,23 @@ php artisan vendor:publish --tag=statamic-cookie-consent --force
 Le blueprint du global est fourni par l'addon. « Modifier le blueprint » dans le CP crée
 `resources/blueprints/globals/cookie_settings.yaml`, qui devient prioritaire : il ne suit
 plus les mises à jour de l'addon, et l'onglet Détection n'y est plus à jour.
+
+## Quand le bandeau est proposé
+
+Le bandeau n'est proposé aux visiteurs que si les deux conditions sont réunies :
+
+- l'interrupteur **« Afficher le bandeau »** (onglet Bandeau du global) est allumé, ce qui
+  est le cas par défaut ;
+- au moins un service demande l'accord, c'est-à-dire un service rattaché à une autre
+  catégorie que « Nécessaires ». Avec seulement les cookies du site, il n'y a rien à
+  accepter : pas de bandeau.
+
+Sinon : ni bandeau ni bouton pour le rouvrir (`{{ cookie_consent:open }}` ne rend rien,
+`{{ cookie_consent:active }}` vaut `false`), et **aucun service soumis à l'accord n'est
+chargé**, même chez un visiteur qui l'avait accepté ; leurs traces sont effacées. Les
+services « Nécessaires », la détection et la liste des cookies continuent de fonctionner.
+Le choix gardé par le navigateur reste : à la réactivation, il s'applique à nouveau tant
+que les services n'ont pas changé.
 
 ## Habillage du bandeau
 

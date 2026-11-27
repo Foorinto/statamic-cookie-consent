@@ -60,6 +60,7 @@ class CookieListTest extends TestCase
 
     public function test_niveau_des_titres_et_bouton(): void
     {
+        $this->metaAndGa();
         $html = $this->render('{{ cookie_consent:table heading_level="2" open_button="true" open_class="btn" }}');
 
         $this->assertStringContainsString('<h2 id="cookie-list-necessary"', $html);
@@ -70,6 +71,7 @@ class CookieListTest extends TestCase
 
     public function test_les_champs_du_bloc_servent_de_parametres(): void
     {
+        $this->metaAndGa();
         $data = ['cookie_list_heading_level' => '4', 'cookie_list_open_button' => true];
 
         $html = $this->render('{{ cookie_consent:table }}', $data);

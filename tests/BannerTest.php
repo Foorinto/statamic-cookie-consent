@@ -162,6 +162,8 @@ class BannerTest extends TestCase
 
     public function test_le_bouton_qui_rouvre_le_bandeau(): void
     {
+        $this->cookieGlobal(['services' => [['id' => 'm1', 'type' => 'meta_pixel', 'pixel_id' => '1858784328492314']]]);
+
         $this->assertSame(
             '<button type="button" class="footer-link" data-cookie-consent-open hidden>Cookie settings</button>',
             $this->render('{{ cookie_consent:open class="footer-link" }}')
@@ -177,6 +179,7 @@ class BannerTest extends TestCase
     {
         $this->twoSites();
         Site::setCurrent('fr');
+        $this->cookieGlobal(['services' => [['id' => 'm1', 'type' => 'meta_pixel', 'pixel_id' => '1858784328492314']]]);
 
         $html = $this->render();
 
@@ -184,6 +187,56 @@ class BannerTest extends TestCase
         $this->assertStringContainsString('data-cc-accept>Tout accepter</button>', $html);
         $this->assertStringContainsString('Toujours actifs', $html);
         $this->assertStringContainsString('>Gérer les cookies</button>', $this->render('{{ cookie_consent:open }}'));
+    }
+
+    public function test_sans_service_a_accepter_le_bandeau_n_est_pas_propose(): void
+    {
+        // Pas de global, puis un service « Nécessaires » seulement : rien à accepter.
+        foreach ([null, ['services' => [
+            ['id' => 'c1', 'type' => 'custom', 'name' => 'Réglages', 'category' => 'necessary', 'cookies' => [
+                ['name' => 'site-a11y', 'storage' => 'local', 'duration' => 'persistent', 'purpose' => 'Accessibilité'],
+            ]],
+        ]]] as $data) {
+            if ($data) {
+                $this->cookieGlobal($data);
+            }
+
+            $html = $this->render();
+
+            $this->assertFalse($this->config($html)['active']);
+            // Le HTML reste (caché) : le script garde la détection et les services « Nécessaires ».
+            $this->assertStringContainsString('<section id="cookie-consent"', $html);
+            $this->assertStringContainsString('cookie-consent.js', $html);
+            $this->assertSame('', $this->render('{{ cookie_consent:open class="footer-link" }}'));
+            $this->assertSame('non', $this->render('{{ if {cookie_consent:active} }}oui{{ else }}non{{ /if }}'));
+        }
+    }
+
+    public function test_un_service_a_accepter_propose_le_bandeau(): void
+    {
+        $this->cookieGlobal(['services' => [['id' => 'm1', 'type' => 'meta_pixel', 'pixel_id' => '1858784328492314']]]);
+
+        $this->assertTrue($this->config($this->render())['active']);
+        $this->assertStringContainsString('data-cookie-consent-open hidden', $this->render('{{ cookie_consent:open }}'));
+        $this->assertSame('oui', $this->render('{{ if {cookie_consent:active} }}oui{{ else }}non{{ /if }}'));
+    }
+
+    public function test_le_bandeau_coupe_dans_le_cp(): void
+    {
+        $this->cookieGlobal(['banner_enabled' => false, 'services' => [['id' => 'm1', 'type' => 'meta_pixel', 'pixel_id' => '1858784328492314']]]);
+
+        $html = $this->render();
+        $config = $this->config($html);
+
+        $this->assertFalse($config['active']);
+        // Les services restent dans la config : le navigateur efface les traces d'un ancien accord.
+        $this->assertContains('m1', array_column($config['services'], 'id'));
+        $this->assertSame('', $this->render('{{ cookie_consent:open }}'));
+        $this->assertStringNotContainsString('data-cookie-consent-open', $this->render('{{ cookie_consent:table open_button="true" }}'));
+
+        // Rallumé : de nouveau proposé.
+        $this->cookieGlobal(['banner_enabled' => true, 'services' => [['id' => 'm1', 'type' => 'meta_pixel', 'pixel_id' => '1858784328492314']]]);
+        $this->assertTrue($this->config($this->render())['active']);
     }
 
     public function test_les_fichiers_du_navigateur_sont_publies(): void

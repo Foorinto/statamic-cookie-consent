@@ -20,7 +20,12 @@ use Statamic\Tags\Tags;
  *   styles="false"           ne charge pas la CSS de l'addon (le site fournit la sienne).
  *
  * {{ cookie_consent:open class="…" }}   bouton qui rouvre le bandeau (pied de page).
- *   En paire, son contenu sert de libellé. Caché tant que le JavaScript n'a pas démarré.
+ *   En paire, son contenu sert de libellé. Caché tant que le JavaScript n'a pas démarré,
+ *   absent quand le bandeau n'est pas proposé.
+ *
+ * {{ if {cookie_consent:active} }} … {{ /if }}   le bandeau est-il proposé ? (allumé dans
+ *   le CP et au moins un service qui demande l'accord) : pour ne pas laisser un élément
+ *   vide autour du bouton, par exemple un <li> du pied de page.
  *
  * {{ cookie_consent:table }} la liste des cookies (politique de confidentialité) : un titre
  *   et un tableau par catégorie.
@@ -57,6 +62,11 @@ class CookieConsent extends Tags
             (string) $this->params->get('class', ''),
             $this->isPair ? trim((string) $this->parse()) : null,
         );
+    }
+
+    public function active(): bool
+    {
+        return $this->settings()->active();
     }
 
     public function table(): string
